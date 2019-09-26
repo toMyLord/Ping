@@ -1,0 +1,3 @@
+/home/mylord/Programs/CLionProjects/MyPing/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mylord/Programs/CLionProjects/MyPing/cmake-build-debug/CMakeFiles/MyPing.dir
+/home/mylord/Programs/CLionProjects/MyPing/cmake-build-debug/CMakeFiles/edit_cache.dir
