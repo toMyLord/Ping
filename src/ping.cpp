@@ -2,8 +2,8 @@
 // Created by mylord on 2019/9/26.
 //
 
-#include <unistd.h>
 #include "ping.h"
+
 Ping::Ping(const char * ip, int max_wait_time){
     this->input_domain = ip;
 
@@ -62,4 +62,50 @@ void Ping::CreateSocket(){
 
     //将ip地址备份下来
     this->backup_ip = inet_ntoa(send_addr.sin_addr);
+
+    printf("PING %s (%s) %d(%d) bytes of data.\n", input_domain.c_str(),
+            backup_ip.c_str(), PACK_SIZE - 8, PACK_SIZE + 24);
+}
+
+unsigned short Ping::CalculateCksum(char * send_pack, int pack_size){
+
+}
+
+int Ping::GeneratePacket()
+{
+    int pack_size;
+    struct icmp * icmp_pointer;
+    struct timeval * time_pointer;
+
+    //将发送的char[]类型的send_pack直接强制转化为icmp结构体类型，方便修改数据
+    icmp_pointer = (struct icmp *)send_pack;
+
+    //type为echo类型且code为0代表回显应答（ping应答）
+    icmp_pointer->icmp_type = ICMP_ECHO;
+    icmp_pointer->icmp_code = 0;
+    icmp_pointer->icmp_cksum = 0;           //计算校验和之前先要将校验位置0
+    icmp_pointer->icmp_seq = send_pack_num; //用send_pack_num作为ICMP包序列号
+    icmp_pointer->icmp_id = getpid();       //用进程号作为ICMP包标志
+
+    pack_size = PACK_SIZE;
+
+    //将icmp结构体中的数据字段直接强制类型转化为timeval类型，方便将Unix时间戳赋值给icmp_data
+    time_pointer = (struct timeval *)icmp_pointer->icmp_data;
+
+    gettimeofday(time_pointer, NULL);
+
+    icmp_pointer->icmp_cksum = CalculateCksum(send_pack, pack_size);
+
+    return pack_size;
+}
+
+void Ping::SendPacket() {
+    int pack_size = GeneratePacket();
+
+    if((sendto(sock_fd, send_pack, pack_size, 0, (const struct sockaddr *)&send_pack, sizeof(send_pack))) < 0){
+        fprintf(stderr, "Sendto error:%s \n\a", strerror(errno));
+        exit(1);
+    }
+
+    this->send_pack_num++;
 }

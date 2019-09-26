@@ -44,8 +44,10 @@ private:
     __time_t total_response_times;  //所有响应时间的总和
 
 
-    void GeneratePacket();
+    int GeneratePacket();
     void ResolvePakcet();
+
+    unsigned short CalculateCksum(char * send_pack, int pack_size);
 
 public:
     Ping(const char * ip, int max_wait_time);

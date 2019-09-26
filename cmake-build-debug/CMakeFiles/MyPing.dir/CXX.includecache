@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/mylord/Programs/CLionProjects/MyPing/main.cpp
+src/ping.h
+/home/mylord/Programs/CLionProjects/MyPing/src/ping.h
+
+/home/mylord/Programs/CLionProjects/MyPing/src/ping.cpp
+unistd.h
+-
+ping.h
+/home/mylord/Programs/CLionProjects/MyPing/src/ping.h
+
+/home/mylord/Programs/CLionProjects/MyPing/src/ping.h
+iostream
+-
+stdlib.h
+-
+unistd.h
+-
+signal.h
+-
+string
+-
+string.h
+-
+netinet/ip_icmp.h
+-
+netdb.h
+-
+sys/socket.h
+-
+sys/types.h
+-
+sys/time.h
+-
+arpa/inet.h
+-
+
