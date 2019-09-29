@@ -18,7 +18,7 @@
 #include <sys/time.h>
 #include <arpa/inet.h>
 
-#define PACK_SIZE 24                //最小的ICMP数据包大小，8字节的ICMP包头，16字节的DATA，其中DATA是timeval结构体
+#define PACK_SIZE 32                //最小的ICMP数据包大小，8字节的ICMP包头，16字节的DATA，其中DATA是timeval结构体
 
 class Ping {
 private:
@@ -37,17 +37,20 @@ private:
     struct sockaddr_in recv_addr;   //接受来自目标的套接字结构体
 
     char send_pack[PACK_SIZE];      //用于保存发送的ICMP包
-    char recv_pack[PACK_SIZE];      //用于保存接收的ICMP包
+    char recv_pack[PACK_SIZE + 20];      //用于保存接收的ICMP包
 
-    struct timeval send_time;       //发送ICMP数据包时的UNIX时间戳
+    struct timeval first_send_time; //第一次发送ICMP数据包时的UNIX时间戳
     struct timeval recv_time;       //接收ICMP数据包时的UNIX时间戳
-    __time_t total_response_times;  //所有响应时间的总和
+
+    double min_time;
+    double max_time;
+    double sum_time;
 
 
     int GeneratePacket();
-    void ResolvePakcet();
+    int ResolvePakcet(int pack_szie);
 
-    unsigned short CalculateCksum(char * send_pack, int pack_size);
+    unsigned short CalculateCksum(unsigned short * send_pack, int pack_size);
 
 public:
     Ping(const char * ip, int max_wait_time);
@@ -58,6 +61,7 @@ public:
     void SendPacket();
     void RecvPacket();
 
+    void statistic();
 };
 
 
