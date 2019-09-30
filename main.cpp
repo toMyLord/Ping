@@ -28,13 +28,4 @@ int main(int argc, char * argv[]) {
         ping.RecvPacket();
         sleep(1);
     }
-
-
-
-
-
-
-
-
-
 }
